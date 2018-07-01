@@ -4,11 +4,13 @@ import {
   FormControl, FormGroup, FormGroupName, FormGroupDirective
 } from '@angular/forms';
 
-import { FormValidMsgService } from '../form-valid-msg.service';
-import { GlobalValidService } from '../global-valid.service';
+import { FormValidMsgService } from '../services/form-valid-msg.service';
+import { GlobalValidService } from '../services/global-valid.service';
+
+const VALID_COMPONENT_NAME = 'mpr-form-control-valid';
 
 @Component({
-  selector: 'mpr-form-control-valid',
+  selector: VALID_COMPONENT_NAME,
   templateUrl: './form-control-valid.component.html',
   styleUrls: ['./form-control-valid.component.css']
 })
@@ -90,7 +92,9 @@ export class FormControlValidComponent implements OnInit, AfterContentInit {
 
   private getParentGroupELem(): Element {
     let parentElement: Element = this.elemRef.nativeElement.parentElement;
-    while (!parentElement.getAttribute('formGroupName') || !parentElement.getAttribute('[formGroup]')) {
+   // const arrtributeNames: Array<string> = parentElement.getAttributeNames();
+   console.log(parentElement.getAttribute('ng-reflect-form'));
+    while (!parentElement.getAttribute('formGroupName') && !parentElement.getAttribute('ng-reflect-form')) {
       parentElement = parentElement.parentElement;
     }
     if(!parentElement){
@@ -120,7 +124,7 @@ export class FormControlValidComponent implements OnInit, AfterContentInit {
   private checkOnluForGroupValid(){
     let previousSibling:Element = this.elemRef.nativeElement.previousElementSibling;
     while(previousSibling && !previousSibling.hasAttribute('formControlName') 
-      && previousSibling.nodeName != 'mpr-form-control-valid'){
+      && previousSibling.nodeName != VALID_COMPONENT_NAME){
         //向前查找一个fromControlName， 如果再次找到 mpr-form-control-valid 则为true
         previousSibling = previousSibling.previousElementSibling;
     }
@@ -148,29 +152,22 @@ export class FormControlValidComponent implements OnInit, AfterContentInit {
       throw new Error('only one [formControl] not support, There must be a formGroupName or [formGroup]');
     }else{
       let parentElement: Element = this.getParentGroupELem();
-      let groupValidControlLength = parentElement.querySelectorAll('mpr-form-control-valid').length;
+      let groupValidControlLength = parentElement.querySelectorAll(VALID_COMPONENT_NAME).length;
       this.groupValidControlLength = groupValidControlLength;
-      let controlsLength = 0;
       if(this.container instanceof FormGroupDirective && groupValidControlLength <= 1){
         //直接是根节点对应整个from [formGroup]="formGroup"
         //整个form表单只有一个mpr-form-control-valid，则以当前formGroup对应的变量名为controlName
         controlName = parentElement.getAttribute('[formGroup]');
-        controlsLength = Object.keys((<FormGroupName|FormGroupDirective>this.container).control.controls).length;
       }else if(this.container instanceof FormGroupName && groupValidControlLength <= 1){
         //父节点是form表单中某个group
         //整个group只有一个mpr-form-control-valid
         //优先取fromGroup的验证
         controlName =  parentElement.getAttribute('fromGroupName');
-        controlsLength = Object.keys((<FormGroupName|FormGroupDirective>this.container).control.controls).length;
       }else{
         // mpr-form-control-valid 对应一个 formControlName
         // 向前查找兄弟节点
         let siblingElem = this.getSlibingFormContrlElem(this.elemRef.nativeElement);
         controlName = siblingElem.getAttribute('formControlName');
-      }
-      //每一个formControlName只能配置一个 mpr-form-control-valid
-      if(controlsLength < groupValidControlLength){
-        throw new Error('mpr-contorl-valid is too many');
       }
     }
     // if(this.controlName && this.controlName != controlName){
@@ -194,6 +191,9 @@ export class FormControlValidComponent implements OnInit, AfterContentInit {
     }
     const path = [];
     for (const ctrlName in root['controls']) {
+       if (root['controls'][ctrlName] === formControl) {
+        return ctrlName;
+      }
       if (root['controls'][ctrlName] instanceof FormGroup) {
         const tmpPath = this.getPath(formControl, root['controls'][ctrlName], controlName);
         if (tmpPath) {
@@ -201,9 +201,7 @@ export class FormControlValidComponent implements OnInit, AfterContentInit {
           path.push(tmpPath);
           return path.join('.');
         }
-      } else if (root['controls'][ctrlName] === formControl) {
-        return ctrlName;
-      }
+      } 
     }
     return path.join('.');
   }

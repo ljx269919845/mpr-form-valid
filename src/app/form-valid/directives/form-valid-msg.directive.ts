@@ -1,6 +1,6 @@
 import { Directive, Input } from '@angular/core';
 
-import { FormValidMsgService } from './form-valid-msg.service';
+import { FormValidMsgService } from '../services/form-valid-msg.service';
 
 @Directive({
   selector: '[isliFormValidMsg]',

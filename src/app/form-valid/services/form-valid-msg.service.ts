@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { VALID_ERROR_MSG } from './common-validtor';
+import { globalValidMsgServ } from './global-valid-msg.service';
 
 @Injectable()
 export class FormValidMsgService {
@@ -21,7 +21,7 @@ export class FormValidMsgService {
     }
     for (const name in error) {
       if (error[name]) {
-        return this.validMsg[msgPath + '.' + name] || VALID_ERROR_MSG[name];
+        return this.validMsg[msgPath + '.' + name] || globalValidMsgServ.getMsg(name);
       }
     }
     return '';

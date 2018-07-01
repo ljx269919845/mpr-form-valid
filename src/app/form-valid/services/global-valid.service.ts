@@ -9,13 +9,13 @@ export class GlobalValidService {
   constructor() { }
 
   public registerValidForm(form: AbstractControl) {
-    let index = this.validForms.findIndex(elem=>{
+    const index = this.validForms.findIndex(elem => {
       return elem.form == form;
     });
-    if(index >= 0){
+    if (index >= 0) {
       this.validForms[index].count += 1;
-    }else{
-      this.validForms.push({control: form, count: 1});
+    } else {
+      this.validForms.push({ form: form, count: 1 });
     }
   }
 
@@ -29,13 +29,13 @@ export class GlobalValidService {
     });
   }
 
-  public unregisterValidForm(form){
-    let index = this.validForms.findIndex(elem=>{
+  public unregisterValidForm(form) {
+    const index = this.validForms.findIndex(elem => {
       return elem.form == form;
     });
-    if(index >= 0 && this.validForms[index].count > 1){
+    if (index >= 0 && this.validForms[index].count > 1) {
       this.validForms[index].count -= 1;
-    }else{
+    } else {
       this.validForms.splice(index, 1);
     }
   }

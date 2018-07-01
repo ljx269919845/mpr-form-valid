@@ -1,0 +1,39 @@
+<div [formGroup]="form" [isliFormValidMsg]="validErrorMsg">
+  <h3>Reactive Form 常规验证</h3>
+  <dl>
+    <dt>用户名</dt>
+    <dd>
+      <input type="text" formControlName="username">
+      <mpr-form-control-valid></mpr-form-control-valid>
+    </dd>
+    <dt>密码</dt>
+    <dd>
+      <input type="password" formControlName="password">
+      <!-- <mpr-form-control-valid></mpr-form-control-valid> -->
+    </dd>
+  </dl>
+  <dl formGroupName="user">
+    <dt>昵称</dt>
+    <dd>
+      <input type="text" formControlName="nickname">
+      <!-- <mpr-form-control-valid></mpr-form-control-valid> -->
+    </dd>
+    <dt>性别</dt>
+    <dd>
+      <span>
+          <label>男</label>
+          <input type="radio" fromControlName="sex">
+      </span>
+      <span>
+        <label>女</label>
+        <input type="radio" fromControlName="sex">
+      </span>
+      <mpr-form-control-valid controlName="sex"></mpr-form-control-valid>
+    </dd>
+  </dl>
+  <dl>
+    <dd>
+      <input type="button" value="确定" (click)="handleSubmit()">
+    </dd>
+  </dl>
+</div>
