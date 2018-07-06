@@ -9,28 +9,30 @@
     <dt>密码</dt>
     <dd>
       <input type="password" formControlName="password">
-      <!-- <mpr-form-control-valid></mpr-form-control-valid> -->
+      <mpr-form-control-valid></mpr-form-control-valid>
     </dd>
   </dl>
   <dl formGroupName="user">
     <dt>昵称</dt>
     <dd>
       <input type="text" formControlName="nickname">
-      <!-- <mpr-form-control-valid></mpr-form-control-valid> -->
+      <mpr-form-control-valid></mpr-form-control-valid>
     </dd>
     <dt>性别</dt>
     <dd>
       <span>
           <label>男</label>
-          <input type="radio" fromControlName="sex">
+          <input type="radio" name="sex" fromControlName="sex">
       </span>
       <span>
         <label>女</label>
-        <input type="radio" fromControlName="sex">
+        <input type="radio" name="sex" fromControlName="sex">
       </span>
+      <!--如果验证消息组件和对应的formControlName不在同一个父节点下， 必须指定controlName-->
       <mpr-form-control-valid controlName="sex"></mpr-form-control-valid>
     </dd>
   </dl>
+  
   <dl>
     <dd>
       <input type="button" value="确定" (click)="handleSubmit()">

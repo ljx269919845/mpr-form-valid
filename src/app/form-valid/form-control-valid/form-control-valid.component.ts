@@ -89,6 +89,18 @@ export class FormControlValidComponent implements OnInit, AfterContentInit {
     this.globalValidServ.unregisterValidForm(this.formControl['root'] || this.formControl);
   }
 
+  private addValuesChangeSubscript(formControl: AbstractControl, path: string, first = true){
+    if(formControl instanceof FormControl){
+      formControl.valueChanges.subscribe(()=>{
+        let msg = this.errMsgServ.getValidMsg(path, formControl.errors);
+        if(first){
+          this.errorMsg = msg;
+        }else if(msg){
+          this.errorMsg = msg;
+        }
+      })
+    }
+  }
 
   private getParentGroupELem(): Element {
     let parentElement: Element = this.elemRef.nativeElement.parentElement;

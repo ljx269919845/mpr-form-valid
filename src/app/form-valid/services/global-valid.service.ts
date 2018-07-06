@@ -20,13 +20,16 @@ export class GlobalValidService {
   }
 
   public validAll() {
+    let result = true;
     this.validForms.forEach(elemForm => {
       // elemForm.markAsDirty({onlySelf: true});
       // if (elemForm instanceof FormGroup) {
       //   this.validFormGroup(elemForm);
       // }
       elemForm.form.patchValue(elemForm.form.value, { emitModelToViewChange: false, emitViewToModelChange: false, onlySelf: true });
+      result = elemForm.form.valid && result;
     });
+    return result;
   }
 
   public unregisterValidForm(form) {
