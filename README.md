@@ -1,27 +1,17 @@
 # MprFormValid
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 6.0.8.
+本项目是为了方便angular form表单的使用，提供了方便的统一的验证错误消息显示
 
-## Development server
+## 编译及启动
+npm run build --prod 编译项目
+npm run start  启动项目例子
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+## 安装
+npm install https://github.com/ljx269919845/mpr-form-valid --save
 
-## Code scaffolding
+## 使用
+1.在项目的功能模板sharedModule中导入FormValidModule 且导出 FormValidModule
+2.在根form组件中配置providers: [GlobalValidService] 如果本Module中同时只存在一个form则不需要此步骤
+3.具体使用方法可以参见 form-group-directive-valid form-group-valid form-valid-only
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
 
-## Build
-
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
-
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
