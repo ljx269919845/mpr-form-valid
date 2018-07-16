@@ -5,6 +5,10 @@ import { FormControlValidComponent } from './form-control-valid/form-control-val
 import { FormValidMsgDirective } from './directives/form-valid-msg.directive';
 import { GlobalValidService } from './services/global-valid.service';
 import { FormValidMsgService } from './services/form-valid-msg.service';
+import { IsbnValidtorDirective } from './validtors/isbn-validtor.directive';
+import { IsbnPartValidDirective } from './validtors/isbn-part-valid.directive';
+import { IsbnHeaderValidDirective } from './validtors/isbn-header-valid.directive';
+import { EmailValidtor, FloatValidtor } from './validtors';
 
 @NgModule({
   imports: [
@@ -12,11 +16,21 @@ import { FormValidMsgService } from './services/form-valid-msg.service';
   ],
   declarations: [
     FormControlValidComponent,
-    FormValidMsgDirective
+    FormValidMsgDirective,
+    IsbnValidtorDirective,
+    IsbnPartValidDirective,
+    IsbnHeaderValidDirective,
+    EmailValidtor,
+    FloatValidtor
   ],
   exports: [
     FormControlValidComponent,
-    FormValidMsgDirective
+    FormValidMsgDirective,
+    IsbnValidtorDirective,
+    IsbnPartValidDirective,
+    IsbnHeaderValidDirective,
+    EmailValidtor,
+    FloatValidtor
   ],
   providers: [
     GlobalValidService,

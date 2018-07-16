@@ -1,10 +1,18 @@
-import { Validator, AbstractControl } from '@angular/forms';
+import { Directive, forwardRef } from '@angular/core';
+import { Validator, AbstractControl, NG_VALIDATORS } from '@angular/forms';
 
 import { globalValidMsgServ } from '../services/global-valid-msg.service';
 
-/**
- * 验证formControl的输入组为float
- */
+const FLOAT_VALIDTOR = {
+    provide: NG_VALIDATORS,
+    useExisting: forwardRef(() => FloatValidtor),
+    multi: true
+};
+
+@Directive({
+    selector: '[mprFloatOnly]',
+    providers: [FLOAT_VALIDTOR]
+})
 export class FloatValidtor implements Validator {
     constructor() {
         globalValidMsgServ.registerMsg('float', '请输入浮点数');

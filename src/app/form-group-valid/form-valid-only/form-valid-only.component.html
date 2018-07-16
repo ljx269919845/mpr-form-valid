@@ -1,35 +1,30 @@
 <div [formGroup]="form" [isliFormValidMsg]="validErrorMsg">
-  <h3>Reactive Form 常规验证</h3>
+  <h3>整个form表单只有一个验证显示，此时一定要配置controlName</h3>
   <dl>
     <dt>用户名</dt>
     <dd>
-      <input type="text" formControlName="username" mprEmailValid>
-      <mpr-form-control-valid></mpr-form-control-valid>
+      <input type="text" formControlName="username">
     </dd>
     <dt>密码</dt>
     <dd>
       <input type="password" formControlName="password">
-      <mpr-form-control-valid></mpr-form-control-valid>
     </dd>
   </dl>
   <dl formGroupName="user">
     <dt>昵称</dt>
     <dd>
       <input type="text" formControlName="nickname">
-      <mpr-form-control-valid></mpr-form-control-valid>
     </dd>
     <dt>性别</dt>
     <dd>
       <span>
           <label>男</label>
-          <input type="radio" name="sex" formControlName="sex">
+          <input type="radio" name="sex" formControlName="sex" value="1">
       </span>
       <span>
         <label>女</label>
-        <input type="radio" name="sex" formControlName="sex">
+        <input type="radio" name="sex" formControlName="sex" value="2">
       </span>
-      <!--如果验证消息组件和对应的formControlName不在同一个父节点下， 必须指定controlName-->
-      <mpr-form-control-valid controlName="sex"></mpr-form-control-valid>
     </dd>
   </dl>
   <dl formGroupName="group1">
@@ -42,8 +37,8 @@
     <dd>
       <input type="text" formControlName="control2">
     </dd>
-    <mpr-form-control-valid></mpr-form-control-valid>
   </dl>
+  <mpr-form-control-valid controlName="form"></mpr-form-control-valid>
   <dl>
     <dd>
       <input type="button" value="确定" (click)="handleSubmit()">

@@ -1,0 +1,51 @@
+<form  #formVar="ngForm" [isliFormValidMsg]="validErrorMsg" (ngSubmit)="handleSubmit(formVar)">
+  <h3>Reactive Form 常规验证</h3>
+  <dl>
+    <dt>用户名</dt>
+    <dd>
+      <input type="text" name="username" [(ngModel)]="form.username" required mprEmailValid>
+      <mpr-form-control-valid></mpr-form-control-valid>
+    </dd>
+    <dt>密码</dt>
+    <dd>
+      <input type="password" name="password" [(ngModel)]="form.password" required>
+      <mpr-form-control-valid></mpr-form-control-valid>
+    </dd>
+  </dl>
+  <dl ngModelGroup="user">
+    <dt>昵称</dt>
+    <dd>
+      <input type="text" name="nickname" [(ngModel)]="form.user.nickname" required>
+      <mpr-form-control-valid></mpr-form-control-valid>
+    </dd>
+    <dt>性别</dt>
+    <dd>
+      <span>
+          <label>男</label>
+          <input type="radio" name="sex" required [(ngModel)]="form.user.sex" value="1">
+      </span>
+      <span>
+        <label>女</label>
+        <input type="radio" name="sex" required [(ngModel)]="form.user.sex" value="2">
+      </span>
+      <mpr-form-control-valid controlName="sex"></mpr-form-control-valid>
+    </dd>
+  </dl>
+  <dl ngModelGroup="group1">
+    <h3>只使用一个pr-form-control-valid显示所有control的错误消息</h3>
+    <dt>contorl1</dt>
+    <dd>
+      <input type="text" name="contorl1" [(ngModel)]="form.group1.control1" required mprEmailValid>
+    </dd>
+    <dt>contorl2</dt>
+    <dd>
+      <input type="text" name="control2" [(ngModel)]="form.group1.control2" required mprFloatOnly>
+    </dd>
+    <mpr-form-control-valid controlName="group1"></mpr-form-control-valid>
+  </dl>
+  <dl>
+    <dd>
+      <input type="submit" value="确定">
+    </dd>
+  </dl>
+</form>

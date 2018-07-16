@@ -1,4 +1,11 @@
-<div class="error" [ngClass]="errorPrompt" [hidden]="!errorMsg">
-  <ng-container [ngTemplateOutlet]="template" [ngTemplateOutletContext]="{errorMsg:errorMsg}"></ng-container>
-  <p *ngIf="!template">{{errorMsg}}</p>
-</div>
+<span
+    class="error"
+    [ngClass]="errorPrompt"
+    [hidden]="!errorMsg"
+>
+    <ng-container
+        [ngTemplateOutlet]="template"
+        [ngTemplateOutletContext]="{errorMsg:errorMsg}"
+    ></ng-container>
+    <p *ngIf="!template">{{errorMsg}}</p>
+</span>
