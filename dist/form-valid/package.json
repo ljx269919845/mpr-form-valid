@@ -1,0 +1,21 @@
+{
+  "name": "form-valid",
+  "version": "0.0.1",
+  "peerDependencies": {
+    "@angular/common": "^6.0.0-rc.0 || ^6.0.0",
+    "@angular/core": "^6.0.0-rc.0 || ^6.0.0"
+  },
+  "main": "bundles/form-valid.umd.js",
+  "module": "fesm5/form-valid.js",
+  "es2015": "fesm2015/form-valid.js",
+  "esm5": "esm5/form-valid.js",
+  "esm2015": "esm2015/form-valid.js",
+  "fesm5": "fesm5/form-valid.js",
+  "fesm2015": "fesm2015/form-valid.js",
+  "typings": "form-valid.d.ts",
+  "metadata": "form-valid.metadata.json",
+  "sideEffects": false,
+  "dependencies": {
+    "tslib": "^1.9.0"
+  }
+}
