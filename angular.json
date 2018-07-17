@@ -121,6 +121,46 @@
           }
         }
       }
+    },
+    "form-valid": {
+      "root": "projects/form-valid",
+      "sourceRoot": "projects/form-valid/src",
+      "projectType": "library",
+      "prefix": "mpr",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/form-valid/tsconfig.lib.json",
+            "project": "projects/form-valid/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "project": "projects/form-valid/ng-package.prod.json"
+            }
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/form-valid/src/test.ts",
+            "tsConfig": "projects/form-valid/tsconfig.spec.json",
+            "karmaConfig": "projects/form-valid/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/form-valid/tsconfig.lib.json",
+              "projects/form-valid/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
     }
   },
   "defaultProject": "mpr-form-valid"

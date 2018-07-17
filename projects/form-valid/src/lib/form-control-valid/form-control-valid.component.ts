@@ -1,4 +1,7 @@
-import { Component, OnInit, ContentChild, TemplateRef, Input, Inject, AfterContentInit, ElementRef, Attribute, Optional } from '@angular/core';
+import {
+  Component, OnInit, ContentChild, TemplateRef, Input, Inject,
+  AfterContentInit, ElementRef, Attribute, Optional
+} from '@angular/core';
 import {
   ControlContainer, AbstractControl, AbstractControlDirective,
   FormControl, FormGroup, FormGroupName, FormGroupDirective, NgModelGroup
@@ -19,17 +22,8 @@ export class FormControlValidComponent implements OnInit, AfterContentInit {
   //只显示formgroup本身的错误，不显示group下control的错误
   @Input() onlyGroup = false;
   @Input() errorPrompt;
-  /**
-   * 自定义errorMsg的template
-   * @type {TemplateRef}
-   * @example
-   * <mpr-form-control-valid>
-   *  <ng-template>
-   *    <span>{{errorMsg}}</span>
-   *  </ng-template>
-   * </mpr-form-control-valid>
-   */
-  @ContentChild(TemplateRef) template;
+
+  @ContentChild(TemplateRef) template: TemplateRef<any>;
 
   public errorMsg: string; //验证失败显示的错误消息
 

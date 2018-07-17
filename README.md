@@ -3,8 +3,9 @@
 本项目是为了方便angular form表单的使用，提供了方便的统一的验证错误消息显示
 
 ## 编译及启动
-npm run build --prod 编译项目
-npm run start  启动项目例子
+1. 编译库： ng build --prod form-valid <br/>
+2. npm run build --prod 编译项目 <br/>
+3. npm run start  启动项目例子 
 
 ## 安装
 npm install https://github.com/ljx269919845/mpr-form-valid --save

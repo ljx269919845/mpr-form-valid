@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { GlobalValidService } from '../../form-valid';
+import { GlobalValidService } from '../../../../dist/form-valid';
 
 const VALID_ERROR_MSG = {
   username: { required: '请输入邮箱' },

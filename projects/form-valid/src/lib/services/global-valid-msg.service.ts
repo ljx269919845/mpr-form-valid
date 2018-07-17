@@ -1,7 +1,7 @@
 /**
  * 全局验证消息， 存储默认消息
  */
-class GlobalValidMsgService {
+export class GlobalValidMsgService {
 
   private validMsg = new Map<String, String>();
   constructor() { }
