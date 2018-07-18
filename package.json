@@ -1,5 +1,5 @@
 {
-  "name": "mpr-form-valid",
+  "name": "mpr-form-valid-example",
   "version": "1.0.0",
   "keywords": [
     "angular",
@@ -34,7 +34,6 @@
     "@angular/platform-browser": "^6.0.3",
     "@angular/platform-browser-dynamic": "^6.0.3",
     "@angular/router": "^6.0.3",
-    "@types/core-js": "^2.5.0",
     "@types/jasmine": "~2.8.6",
     "@types/jasminewd2": "~2.0.3",
     "@types/node": "~8.9.4",

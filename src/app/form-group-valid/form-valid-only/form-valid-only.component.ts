@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { EmailValidtor } from '../../../../dist/form-valid';
-import { GlobalValidService } from '../../../../dist/form-valid';
+import { EmailValidtor } from '../../../../mpr-form-valid';
+import { GlobalValidService } from '../../../../mpr-form-valid';
 
 const VALID_ERROR_MSG = {
   form: {
