@@ -59,7 +59,9 @@ export class FormControlValidComponent implements OnInit, AfterContentInit {
     }
     console.log(this.controlName);
     let path = '';
-    if (this.groupValidControlLength <= 1) {
+    const isFormControl = this.container.control.get(this.controlName)
+      && (this.container.control.get(this.controlName) instanceof FormControl);
+    if (!isFormControl) {
       // from root or from formGroupName
       this.formControl = this.container.control;
       path = this.getPath(this.formControl, this.formControl.root, this.controlName);
