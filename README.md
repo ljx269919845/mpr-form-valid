@@ -3,7 +3,7 @@
 本项目是为了方便angular form表单的使用，提供了方便的统一的验证错误消息显示
 
 ## 编译及启动
-1. 编译库： ng build --prod form-valid <br/>
+1. 编译库： ng build --prod mpr-form-valid <br/>
 2. npm run build --prod 编译项目 <br/>
 3. npm run start  启动example
 
@@ -57,9 +57,7 @@ isliFormValidMsg = {
 
 |指令名称                 | 指令描述  | 返回错误key|
 | :-------------- | ----------------------------: | :-----------:|
-| mprEmailValid | email验证 | emailError |
-| mprFloatOnly | 输入为float验证 | float |
-| mprPriceValid | 输入为价格验证 | price |
+| mprFloatOnlyValidtor | 输入为float验证 | float |
 | mprIsbnValid | ISBN校验位验证 | isbn |
 | mprIsbnPartValid | ISBN第三位第四位长度和验证 | isbnPart34 |
 | mprIsbnHeaderValid | ISBN首段验证 | isbnHeader |

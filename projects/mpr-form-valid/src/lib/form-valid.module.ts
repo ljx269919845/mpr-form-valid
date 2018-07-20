@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 
 import { FormControlValidComponent } from './form-control-valid/form-control-valid.component';
 import { FormValidMsgDirective } from './directives/form-valid-msg.directive';
@@ -8,11 +9,13 @@ import { FormValidMsgService } from './services/form-valid-msg.service';
 import { IsbnValidtorDirective } from './validtors/isbn-validtor.directive';
 import { IsbnPartValidDirective } from './validtors/isbn-part-valid.directive';
 import { IsbnHeaderValidDirective } from './validtors/isbn-header-valid.directive';
-import { EmailValidtor, FloatValidtor, PriceValidtor } from './validtors';
+import { FloatOnlyValidtorDirective } from './validtors/float-only-validtor.directive';
 
 @NgModule({
   imports: [
-    CommonModule
+    CommonModule,
+    ReactiveFormsModule,
+    FormsModule
   ],
   declarations: [
     FormControlValidComponent,
@@ -20,9 +23,7 @@ import { EmailValidtor, FloatValidtor, PriceValidtor } from './validtors';
     IsbnValidtorDirective,
     IsbnPartValidDirective,
     IsbnHeaderValidDirective,
-    EmailValidtor,
-    FloatValidtor,
-    PriceValidtor
+    FloatOnlyValidtorDirective,
   ],
   exports: [
     FormControlValidComponent,
@@ -30,9 +31,9 @@ import { EmailValidtor, FloatValidtor, PriceValidtor } from './validtors';
     IsbnValidtorDirective,
     IsbnPartValidDirective,
     IsbnHeaderValidDirective,
-    EmailValidtor,
-    FloatValidtor,
-    PriceValidtor
+    ReactiveFormsModule,
+    FormsModule,
+    FloatOnlyValidtorDirective
   ],
   providers: [
     GlobalValidService,

@@ -17,11 +17,11 @@
       "dom"
     ],
     "paths": {
-      "form-valid": [
-        "dist/form-valid"
+      "mpr-form-valid": [
+        "mpr-form-valid"
       ],
-      "form-valid/*": [
-        "dist/form-valid/*"
+      "mpr-form-valid/*": [
+        "mpr-form-valid/*"
       ]
     }
   }

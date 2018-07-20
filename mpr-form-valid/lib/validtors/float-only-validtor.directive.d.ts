@@ -1,5 +1,5 @@
 import { Validator, AbstractControl } from '@angular/forms';
-export declare class FloatValidtor implements Validator {
+export declare class FloatOnlyValidtorDirective implements Validator {
     constructor();
     validate(c: AbstractControl): {
         float: boolean;
