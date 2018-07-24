@@ -67,16 +67,17 @@ export class FormControlValidComponent implements OnInit, AfterContentInit {
       path = this.getPath(this.formControl, this.formControl.root, this.controlName);
       this.formControl.valueChanges.subscribe(() => {
         if (this.onlyGroup) {
-          this.errorMsg = this.errMsgServ.getValidMsg(path || this.controlName, this.formControl.errors);
+          this.errorMsg = this.errMsgServ.getValidMsg(path || this.controlName, this.formControl.errors)['errorMsg'];
         } else {
-          this.errorMsg = this.getGroupControlValidMsg(<any>this.formControl, path || this.controlName);
+          this.errorMsg = this.getGroupControlValidMsg(<any>this.formControl, path || this.controlName, 
+            {minWeight: Number.MAX_VALUE, errorMsg: ''})['errorMsg'];
         }
       });
     } else {
       this.formControl = this.container.control.get(this.controlName);
       path = this.getPath(this.formControl, this.formControl.root, this.controlName);
       this.formControl.valueChanges.subscribe(() => {
-        this.errorMsg = this.errMsgServ.getValidMsg(path || this.controlName, this.formControl.errors);
+        this.errorMsg = this.errMsgServ.getValidMsg(path || this.controlName, this.formControl.errors)['errorMsg'];
       });
     }
     if (!this.formControl) {
@@ -91,23 +92,39 @@ export class FormControlValidComponent implements OnInit, AfterContentInit {
     this.globalValidServ.unregisterValidForm(this.formControl['root'] || this.formControl);
   }
 
+  private setFormControlMsgListener(control: FormGroup | FormControl, path){
+    control.valueChanges.subscribe(()=>{
+      let errorInfo = this.errMsgServ.getValidMsg(path || this.controlName, control.errors)
+    });
+    if(control instanceof FormGroup){
+      for (let name in control.controls){
+        this.setFormControlMsgListener(<any>control.get(name), path + '.' + name);
+      }
+    }
+  }
+
   /**
    * 获取group下面的所有验证错误消息
    * @param control 
    * @param path 
    */
-  private getGroupControlValidMsg(control: FormGroup | FormControl, path: string) {
+  private getGroupControlValidMsg(control: FormGroup | FormControl, path: string, errorInfo) {
+    
     if (control instanceof FormControl) {
       return this.errMsgServ.getValidMsg(path, control.errors);
     }
-    let msg;
+    let tmpErrorInfo;
     for (let name in control.controls) {
-      msg = this.getGroupControlValidMsg(<any>control.get(name), path + '.' + name);
-      if (msg) {
-        return msg;
+      tmpErrorInfo = this.getGroupControlValidMsg(<any>control.get(name), path + '.' + name, errorInfo);
+      if(tmpErrorInfo['minWeight'] < errorInfo['minWeight']){
+        errorInfo = tmpErrorInfo;
       }
     }
-    return this.errMsgServ.getValidMsg(path, control.errors);
+    tmpErrorInfo = this.errMsgServ.getValidMsg(path, control.errors);
+    if(tmpErrorInfo['minWeight'] < errorInfo['minWeight']){
+      errorInfo = tmpErrorInfo;
+    }
+    return errorInfo;
   }
 
   private getParentGroupELem(): Element {

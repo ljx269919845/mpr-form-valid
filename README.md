@@ -9,6 +9,7 @@
 
 ## 安装
 npm install https://github.com/ljx269919845/mpr-form-valid --save
+`直接从github上安装发现无法在prod下编译通过， 建议发布到npm或者私有npm上`
 
 ## 使用
 1.在项目的功能模板sharedModule中导入FormValidModule 且导出 FormValidModule <br/>
@@ -61,3 +62,6 @@ isliFormValidMsg = {
 | mprIsbnValid | ISBN校验位验证 | isbn |
 | mprIsbnPartValid | ISBN第三位第四位长度和验证 | isbnPart34 |
 | mprIsbnHeaderValid | ISBN首段验证 | isbnHeader |
+
+##验证指令配置优先级
+所有的验证错误{errorKey： true}应该修正为{errorKey： 权重值}， 权重值越小越优先显示

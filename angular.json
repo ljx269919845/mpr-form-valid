@@ -7,7 +7,7 @@
       "root": "",
       "sourceRoot": "src",
       "projectType": "application",
-      "prefix": "app",
+      "prefix": "mpr",
       "schematics": {},
       "architect": {
         "build": {
@@ -50,18 +50,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "mpr-form-valid:build"
+            "browserTarget": "mpr-form-valid-example:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "mpr-form-valid:build:production"
+              "browserTarget": "mpr-form-valid-example:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "mpr-form-valid:build"
+            "browserTarget": "mpr-form-valid-example:build"
           }
         },
         "test": {
@@ -103,11 +103,11 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "mpr-form-valid:serve"
+            "devServerTarget": "mpr-form-valid-example:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "mpr-form-valid:serve:production"
+              "devServerTarget": "mpr-form-valid-example:serve:production"
             }
           }
         },

@@ -16,22 +16,38 @@ export class FormValidMsgService {
   }
 
   public getValidMsg(msgPath: string, error) {
+    let minWeight = Number.MAX_VALUE;
+    let errorMsg = '';
+    let tmpMsg;
+    let tmpWeight;
+
     if (!error || !msgPath) {
-      return '';
+      return {errorMsg, minWeight};
     }
+    
     for (const name in error) {
-      if (error[name]) {
-        return this.validMsg[msgPath + '.' + name] || globalValidMsgServ.getMsg(name);
+      tmpMsg = this.validMsg[msgPath + '.' + name] || globalValidMsgServ.getMsg(name);
+      if(!tmpMsg){
+        continue;
+      }
+      if(Number.isNaN(Number(error[name]))){
+        tmpWeight = 1000;
+      }else{
+        tmpWeight = Number(error[name]);
+      }
+      if(tmpWeight < minWeight){
+        minWeight = tmpWeight;
+        errorMsg = tmpMsg;
       }
     }
-    return '';
+    return {errorMsg, minWeight};
   }
 
   public resetMsg(msg: Object) {
     if (typeof msg !== 'object') {
       throw Error('form valid msg must be a object');
     }
-    this.validMsg = {};
+    //this.validMsg = {};
 
     for (const name in msg) {
       if (typeof msg[name] !== 'object') {

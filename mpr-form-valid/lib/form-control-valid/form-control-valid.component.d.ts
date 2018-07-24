@@ -24,7 +24,7 @@ export declare class FormControlValidComponent implements OnInit, AfterContentIn
      * @param control
      * @param path
      */
-    private getGroupControlValidMsg(control, path);
+    private getGroupControlValidMsg(control, path, errorInfo);
     private getParentGroupELem();
     private getSlibingFormContrlElem(searchElem);
     /**
