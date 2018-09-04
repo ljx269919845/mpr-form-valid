@@ -22,13 +22,13 @@ export class FormControlValidComponent implements OnInit, AfterContentInit {
   //只显示formgroup本身的错误，不显示group下control的错误
   @Input() onlyGroup = false;
   @Input() errorPrompt;
+  @Input() controlName;
 
   @ContentChild(TemplateRef) template: TemplateRef<any>;
 
   public errorMsg: string; //验证失败显示的错误消息
 
   private formControl: AbstractControl;
-  private controlName: string;
   private groupValidControlLength = 1;
 
   constructor(
@@ -65,7 +65,7 @@ export class FormControlValidComponent implements OnInit, AfterContentInit {
       // from root or from formGroupName
       this.formControl = this.container.control;
       path = this.getPath(this.formControl, this.formControl.root, this.controlName);
-      this.formControl.valueChanges.subscribe(() => {
+      this.formControl.statusChanges.subscribe(() => {
         if (this.onlyGroup) {
           this.errorMsg = this.errMsgServ.getValidMsg(path || this.controlName, this.formControl.errors)['errorMsg'];
         } else {
@@ -76,7 +76,7 @@ export class FormControlValidComponent implements OnInit, AfterContentInit {
     } else {
       this.formControl = this.container.control.get(this.controlName);
       path = this.getPath(this.formControl, this.formControl.root, this.controlName);
-      this.formControl.valueChanges.subscribe(() => {
+      this.formControl.statusChanges.subscribe(() => {
         this.errorMsg = this.errMsgServ.getValidMsg(path || this.controlName, this.formControl.errors)['errorMsg'];
       });
     }

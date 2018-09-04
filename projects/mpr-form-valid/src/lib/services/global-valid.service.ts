@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, EventEmitter } from '@angular/core';
 import { FormGroup, FormControl, AbstractControl } from '@angular/forms';
 
 @Injectable()
@@ -22,11 +22,15 @@ export class GlobalValidService {
   public validAll() {
     let result = true;
     this.validForms.forEach(elemForm => {
-      // elemForm.markAsDirty({onlySelf: true});
-      // if (elemForm instanceof FormGroup) {
-      //   this.validFormGroup(elemForm);
-      // }
-      elemForm.form.patchValue(elemForm.form.value, { emitModelToViewChange: false, emitViewToModelChange: false, onlySelf: true });
+      if (!elemForm.form.valid) {
+        //  elemForm.form.patchValue(elemForm.form.value, { emitModelToViewChange: false, emitViewToModelChange: false, onlySelf: true });
+        if (elemForm.form instanceof FormControl) {
+          console.log(elemForm.form.status, elemForm.form);
+          elemForm.form.statusChanges.emit(elemForm.form.status);
+        } else {
+          this.validFormGroup(elemForm.form);
+        }
+      }
       result = elemForm.form.valid && result;
     });
     return result;
@@ -43,16 +47,16 @@ export class GlobalValidService {
     }
   }
 
-  // private validFormGroup(formGroup: FormGroup) {
-  //   formGroup.markAsDirty({onlySelf: true});
-  //   const formControls = formGroup.controls;
-  //   for (const name in formControls) {
-  //     if (formControls[name] instanceof FormGroup) {
-  //       this.validFormGroup(<FormGroup>formControls[name]);
-  //     } else {
-  //       formControls[name].markAsDirty({onlySelf: true});
-  //     }
-  //   }
-  // }
+  private validFormGroup(formGroup: FormGroup) {
+    const formControls = formGroup.controls;
+    for (const name in formControls) {
+      if (formControls[name] instanceof FormGroup) {
+        this.validFormGroup(<FormGroup>formControls[name]);
+      } else {
+        console.log(formControls[name].status, formControls[name]);
+        (formControls[name].statusChanges as EventEmitter<string>).emit(formControls[name].status);
+      }
+    }
+  }
 
 }

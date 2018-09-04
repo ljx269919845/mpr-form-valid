@@ -9,16 +9,17 @@ export declare class FormControlValidComponent implements OnInit, AfterContentIn
     private elemRef;
     onlyGroup: boolean;
     errorPrompt: any;
+    controlName: any;
     template: TemplateRef<any>;
     errorMsg: string;
     private formControl;
-    private controlName;
     private groupValidControlLength;
     constructor(controlName: string, container: ControlContainer, errMsgServ: FormValidMsgService, globalValidServ: GlobalValidService, elemRef: ElementRef);
     ngOnInit(): void;
     ngAfterContentInit(): void;
     bindControlErrorMsg(): void;
     ngOnDestroy(): void;
+    private setFormControlMsgListener(control, path);
     /**
      * 获取group下面的所有验证错误消息
      * @param control

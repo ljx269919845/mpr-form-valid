@@ -5,4 +5,5 @@ export declare class GlobalValidService {
     registerValidForm(form: AbstractControl): void;
     validAll(): boolean;
     unregisterValidForm(form: any): void;
+    private validFormGroup(formGroup);
 }
