@@ -69,7 +69,7 @@ export class FormControlValidComponent implements OnInit, AfterContentInit {
         if (this.onlyGroup) {
           this.errorMsg = this.errMsgServ.getValidMsg(path || this.controlName, this.formControl.errors)['errorMsg'];
         } else {
-          this.errorMsg = this.getGroupControlValidMsg(<any>this.formControl, path || this.controlName, 
+          this.errorMsg = this.getGroupControlValidMsg(<any>this.formControl, path || this.controlName,
             {minWeight: Number.MAX_VALUE, errorMsg: ''})['errorMsg'];
         }
       });
@@ -105,11 +105,11 @@ export class FormControlValidComponent implements OnInit, AfterContentInit {
 
   /**
    * 获取group下面的所有验证错误消息
-   * @param control 
-   * @param path 
+   * @param control
+   * @param path
    */
   private getGroupControlValidMsg(control: FormGroup | FormControl, path: string, errorInfo) {
-    
+
     if (control instanceof FormControl) {
       return this.errMsgServ.getValidMsg(path, control.errors);
     }
@@ -130,15 +130,19 @@ export class FormControlValidComponent implements OnInit, AfterContentInit {
   private getParentGroupELem(): Element {
     let parentElement: Element = this.elemRef.nativeElement.parentElement;
     // const arrtributeNames: Array<string> = parentElement.getAttributeNames();
-    console.log(parentElement.getAttribute('ng-reflect-form'));
-    while (!parentElement.getAttribute('formgroupname')
+    // console.log(parentElement.getAttribute('ng-reflect-form'));
+    while (
+      parentElement &&
+      !parentElement.getAttribute('formgroupname')
       && !parentElement.getAttribute('formGroupName')
-      && !parentElement.getAttribute('ng-reflect-form')
-      && !(parentElement.nodeName.toLocaleLowerCase() === 'form')
-      && !(parentElement.nodeName.toLocaleLowerCase() === 'ngform')) {
+      && !parentElement.getAttribute('formgroup')) {
+      if(parentElement.nodeName.toLocaleLowerCase() === 'form' || parentElement.nodeName.toLocaleLowerCase() === 'ngform'){
+        break;
+      }
       parentElement = parentElement.parentElement;
     }
     if (!parentElement) {
+      console.log(this.elemRef.nativeElement);
       throw new Error("can not find parentElement");
     }
     return parentElement;
@@ -208,9 +212,9 @@ export class FormControlValidComponent implements OnInit, AfterContentInit {
 
   /**
    * 获取当前formControl相对于formGroup的path
-   * @param formControl 
-   * @param root 
-   * @param controlName 
+   * @param formControl
+   * @param root
+   * @param controlName
    */
   private getPath(formControl: AbstractControl, root, controlName) {
     if (!(root instanceof FormGroup)) {

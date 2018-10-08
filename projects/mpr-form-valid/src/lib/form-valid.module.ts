@@ -10,6 +10,7 @@ import { IsbnValidtorDirective } from './validtors/isbn-validtor.directive';
 import { IsbnPartValidDirective } from './validtors/isbn-part-valid.directive';
 import { IsbnHeaderValidDirective } from './validtors/isbn-header-valid.directive';
 import { FloatOnlyValidtorDirective } from './validtors/float-only-validtor.directive';
+import { MprFormGroupDirective } from './directives/form-group.directive';
 
 @NgModule({
   imports: [
@@ -24,6 +25,7 @@ import { FloatOnlyValidtorDirective } from './validtors/float-only-validtor.dire
     IsbnPartValidDirective,
     IsbnHeaderValidDirective,
     FloatOnlyValidtorDirective,
+    MprFormGroupDirective
   ],
   exports: [
     FormControlValidComponent,
@@ -33,7 +35,8 @@ import { FloatOnlyValidtorDirective } from './validtors/float-only-validtor.dire
     IsbnHeaderValidDirective,
     ReactiveFormsModule,
     FormsModule,
-    FloatOnlyValidtorDirective
+    FloatOnlyValidtorDirective,
+    MprFormGroupDirective
   ],
   providers: [
     GlobalValidService,

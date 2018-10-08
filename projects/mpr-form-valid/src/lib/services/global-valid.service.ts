@@ -3,13 +3,12 @@ import { FormGroup, FormControl, AbstractControl } from '@angular/forms';
 
 @Injectable()
 export class GlobalValidService {
-
   private validForms: Array<any> = [];
 
   constructor() { }
 
   public registerValidForm(form: AbstractControl) {
-    const index = this.validForms.findIndex(elem => {
+    const index = this.validForms.findIndex((elem) => {
       return elem.form == form;
     });
     if (index >= 0) {
@@ -19,10 +18,28 @@ export class GlobalValidService {
     }
   }
 
+  public resetNull() {
+    this.validForms.forEach((elemForm) => {
+      if (elemForm.form instanceof FormControl) {
+        elemForm.form.reset(null, { emitEvent: false, onlySelf: true });
+        elemForm.form.setErrors(null, { emitEvent: true });
+      } else {
+        elemForm.form.reset({}, { emitEvent: false, onlySelf: true });
+        elemForm.form.setErrors(null, { emitEvent: false });
+        this.resetGroup(elemForm.form);
+      }
+      elemForm.form['_reset'] = true;
+    });
+  }
+
   public validAll() {
     let result = true;
-    this.validForms.forEach(elemForm => {
-      if (!elemForm.form.valid) {
+    this.validForms.forEach((elemForm) => {
+      if (!elemForm.form.valid || elemForm.form['_reset']) {
+      //  if (elemForm.form['_reset']) {
+          elemForm.form.patchValue(elemForm.form.value, { emitModelToViewChange: false, emitViewToModelChange: false, onlySelf: true });
+      //  }
+        elemForm.form['_reset'] = false;
         //  elemForm.form.patchValue(elemForm.form.value, { emitModelToViewChange: false, emitViewToModelChange: false, onlySelf: true });
         if (elemForm.form instanceof FormControl) {
           console.log(elemForm.form.status, elemForm.form);
@@ -37,7 +54,7 @@ export class GlobalValidService {
   }
 
   public unregisterValidForm(form) {
-    const index = this.validForms.findIndex(elem => {
+    const index = this.validForms.findIndex((elem) => {
       return elem.form == form;
     });
     if (index >= 0 && this.validForms[index].count > 1) {
@@ -50,13 +67,34 @@ export class GlobalValidService {
   private validFormGroup(formGroup: FormGroup) {
     const formControls = formGroup.controls;
     for (const name in formControls) {
+      if (!formControls.hasOwnProperty(name)) {
+        continue;
+      }
       if (formControls[name] instanceof FormGroup) {
         this.validFormGroup(<FormGroup>formControls[name]);
-      } else {
+      }
+      if (!formControls[name].valid || formControls[name]['_reset']) {
+        formControls[name]['_reset'] = false;
         console.log(formControls[name].status, formControls[name]);
         (formControls[name].statusChanges as EventEmitter<string>).emit(formControls[name].status);
       }
     }
+
   }
 
+  private resetGroup(formGroup: FormGroup) {
+    const formControls = formGroup.controls;
+    for (const name in formControls) {
+      if (!formControls.hasOwnProperty(name)) {
+        continue;
+      }
+      if (formControls[name] instanceof FormGroup) {
+        formControls[name].setErrors(null, { emitEvent: false });
+        this.resetGroup(<FormGroup>formControls[name]);
+      } else {
+        formControls[name].setErrors(null, { emitEvent: true });
+      }
+      formControls[name]['_reset'] = true;
+    }
+  }
 }
