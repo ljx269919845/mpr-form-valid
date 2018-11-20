@@ -28,7 +28,16 @@ export class GlobalValidService {
         elemForm.form.setErrors(null, { emitEvent: false });
         this.resetGroup(elemForm.form);
       }
+      if(elemForm['sub']){
+        elemForm['sub'].unsubscribe();
+      }
       elemForm.form['_reset'] = true;
+      const sub = elemForm.form.valueChanges.subscribe(()=>{
+        elemForm.form['_reset'] = false;
+        elemForm['sub'].unsubscribe();
+        elemForm['sub'] = null;
+      });
+      elemForm['sub'] = sub;
     });
   }
 
@@ -37,13 +46,15 @@ export class GlobalValidService {
     this.validForms.forEach((elemForm) => {
       if (!elemForm.form.valid || elemForm.form['_reset']) {
       //  if (elemForm.form['_reset']) {
-          elemForm.form.patchValue(elemForm.form.value, { emitModelToViewChange: false, emitViewToModelChange: false, onlySelf: true });
+       //   elemForm.form.patchValue(elemForm.form.value, { emitModelToViewChange: false, emitViewToModelChange: false, onlySelf: true });
       //  }
         elemForm.form['_reset'] = false;
         //  elemForm.form.patchValue(elemForm.form.value, { emitModelToViewChange: false, emitViewToModelChange: false, onlySelf: true });
         if (elemForm.form instanceof FormControl) {
           console.log(elemForm.form.status, elemForm.form);
           elemForm.form.statusChanges.emit(elemForm.form.status);
+          elemForm.form.setValue(elemForm.form.value,
+            { emitModelToViewChange: false, emitViewToModelChange: false, onlySelf: true, emitEvent: false });
         } else {
           this.validFormGroup(elemForm.form);
         }
@@ -77,6 +88,8 @@ export class GlobalValidService {
         formControls[name]['_reset'] = false;
         console.log(formControls[name].status, formControls[name]);
         (formControls[name].statusChanges as EventEmitter<string>).emit(formControls[name].status);
+        formControls[name].setValue(formControls[name].value,
+          { emitModelToViewChange: false, emitViewToModelChange: false, onlySelf: true, emitEvent: false });
       }
     }
 
