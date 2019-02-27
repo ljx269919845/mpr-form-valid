@@ -12,7 +12,7 @@ export class FormValidMsgService {
     if (!msgValue) {
       return;
     }
-    this.validMsg[msgKey] = msgValue;
+    this.validMsg[msgKey.toLowerCase()] = msgValue;
   }
 
   public getValidMsg(msgPath: string, error) {
@@ -20,12 +20,13 @@ export class FormValidMsgService {
     let errorMsg = '';
     let tmpMsg;
     let tmpWeight;
-
+    msgPath = (msgPath || '').toLowerCase();
     if (!error || !msgPath) {
       return {errorMsg, minWeight};
     }
-    
-    for (const name in error) {
+
+    for (let name in error) {
+      name = name.toLowerCase();
       tmpMsg = this.validMsg[msgPath + '.' + name] || globalValidMsgServ.getMsg(name);
       if(!tmpMsg){
         continue;
@@ -51,9 +52,9 @@ export class FormValidMsgService {
 
     for (const name in msg) {
       if (typeof msg[name] !== 'object') {
-        this.validMsg[name] = msg[name];
+        this.validMsg[name.toLowerCase()] = msg[name];
       } else {
-        this.formatMsg(msg[name], name, this.validMsg);
+        this.formatMsg(msg[name], name.toLowerCase(), this.validMsg);
       }
     }
   }
@@ -61,9 +62,9 @@ export class FormValidMsgService {
   private formatMsg(msg: Object, path: string, result: Object) {
     for (const name in msg) {
       if (typeof msg[name] !== 'object') {
-        result[path + '.' + name] = msg[name];
+        result[path + '.' + name.toLowerCase()] = msg[name];
       } else {
-        this.formatMsg(msg[name], path + '.' + name, result);
+        this.formatMsg(msg[name], path + '.' + name.toLowerCase(), result);
       }
     }
   }

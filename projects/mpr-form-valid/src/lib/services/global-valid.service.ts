@@ -7,15 +7,20 @@ export class GlobalValidService {
 
   constructor() { }
 
-  public registerValidForm(form: AbstractControl) {
-    const index = this.validForms.findIndex((elem) => {
+  public registerValidForm(form: AbstractControl, errorHook: Function) {
+    let index = this.validForms.findIndex((elem) => {
       return elem.form == form;
     });
     if (index >= 0) {
       this.validForms[index].count += 1;
     } else {
-      this.validForms.push({ form: form, count: 1 });
+      index = this.validForms.length;
+      this.validForms.push({ form: form, count: 1, errorHooks: [] });
     }
+    if(errorHook){
+      this.validForms[index].errorHooks.push(errorHook);
+    }
+
   }
 
   public resetNull() {
@@ -28,11 +33,11 @@ export class GlobalValidService {
         elemForm.form.setErrors(null, { emitEvent: false });
         this.resetGroup(elemForm.form);
       }
-      if(elemForm['sub']){
+      if (elemForm['sub']) {
         elemForm['sub'].unsubscribe();
       }
       elemForm.form['_reset'] = true;
-      const sub = elemForm.form.valueChanges.subscribe(()=>{
+      const sub = elemForm.form.valueChanges.subscribe(() => {
         elemForm.form['_reset'] = false;
         elemForm['sub'].unsubscribe();
         elemForm['sub'] = null;
@@ -45,18 +50,25 @@ export class GlobalValidService {
     let result = true;
     this.validForms.forEach((elemForm) => {
       if (!elemForm.form.valid || elemForm.form['_reset']) {
-      //  if (elemForm.form['_reset']) {
-       //   elemForm.form.patchValue(elemForm.form.value, { emitModelToViewChange: false, emitViewToModelChange: false, onlySelf: true });
-      //  }
-        elemForm.form['_reset'] = false;
+        //  if (elemForm.form['_reset']) {
+        //   elemForm.form.patchValue(elemForm.form.value, { emitModelToViewChange: false, emitViewToModelChange: false, onlySelf: true });
+        //  }
         //  elemForm.form.patchValue(elemForm.form.value, { emitModelToViewChange: false, emitViewToModelChange: false, onlySelf: true });
         if (elemForm.form instanceof FormControl) {
           console.log(elemForm.form.status, elemForm.form);
+          if (elemForm.form['_reset']) {
+            elemForm.form['_reset'] = false;
+            elemForm.form.setValue(elemForm.form.value,
+              { emitModelToViewChange: false, emitViewToModelChange: false, onlySelf: true, emitEvent: false });
+          }
           elemForm.form.statusChanges.emit(elemForm.form.status);
-          elemForm.form.setValue(elemForm.form.value,
-            { emitModelToViewChange: false, emitViewToModelChange: false, onlySelf: true, emitEvent: false });
         } else {
           this.validFormGroup(elemForm.form);
+        }
+        if(!elemForm.form.valid){
+          elemForm.errorHooks.forEach(errorHook => {
+            errorHook(elemForm.form);
+          });
         }
       }
       result = elemForm.form.valid && result;
@@ -64,12 +76,18 @@ export class GlobalValidService {
     return result;
   }
 
-  public unregisterValidForm(form) {
+  public unregisterValidForm(form, errorHook: Function) {
     const index = this.validForms.findIndex((elem) => {
       return elem.form == form;
     });
     if (index >= 0 && this.validForms[index].count > 1) {
       this.validForms[index].count -= 1;
+      if(errorHook){
+        const fIndex = this.validForms[index].errorHooks.indexOf(errorHook);
+        if(fIndex != -1){
+          this.validForms[index].errorHooks.splice(fIndex, 1);
+        }
+      }
     } else {
       this.validForms.splice(index, 1);
     }
@@ -85,11 +103,21 @@ export class GlobalValidService {
         this.validFormGroup(<FormGroup>formControls[name]);
       }
       if (!formControls[name].valid || formControls[name]['_reset']) {
-        formControls[name]['_reset'] = false;
         console.log(formControls[name].status, formControls[name]);
+        if (formControls[name]['_reset']) {
+          formControls[name]['_reset'] = false;
+          formControls[name].setValue(formControls[name].value,
+            { emitModelToViewChange: false, emitViewToModelChange: false, onlySelf: true, emitEvent: false });
+        }
         (formControls[name].statusChanges as EventEmitter<string>).emit(formControls[name].status);
-        formControls[name].setValue(formControls[name].value,
-          { emitModelToViewChange: false, emitViewToModelChange: false, onlySelf: true, emitEvent: false });
+      }
+      if (!formGroup.valid || formGroup['_reset']) {
+        if (formGroup['_reset']) {
+          formGroup['_reset'] = false;
+          formGroup.setValue(formGroup.value,
+            { onlySelf: true, emitEvent: false });
+        }
+        (formGroup.statusChanges as EventEmitter<string>).emit(formControls[name].status);
       }
     }
 

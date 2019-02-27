@@ -23,6 +23,7 @@ export class FormControlValidComponent implements OnInit, AfterContentInit {
   @Input() onlyGroup = false;
   @Input() errorPrompt;
   @Input() controlName;
+  @Input() errorHook: Function;
 
   @ContentChild(TemplateRef) template: TemplateRef<any>;
 
@@ -83,13 +84,13 @@ export class FormControlValidComponent implements OnInit, AfterContentInit {
     if (!this.formControl) {
       throw new Error('formControl instance not find');
     }
-    this.globalValidServ.registerValidForm(this.formControl['root'] || this.formControl);
+    this.globalValidServ.registerValidForm(this.formControl['root'] || this.formControl, this.errorHook);
   }
 
   ngOnDestroy(): void {
     //Called once, before the instance is destroyed.
     //Add 'implements OnDestroy' to the class.
-    this.globalValidServ.unregisterValidForm(this.formControl['root'] || this.formControl);
+    this.globalValidServ.unregisterValidForm(this.formControl['root'] || this.formControl, this.errorHook);
   }
 
   private setFormControlMsgListener(control: FormGroup | FormControl, path){

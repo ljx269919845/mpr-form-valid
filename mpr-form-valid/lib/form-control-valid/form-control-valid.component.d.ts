@@ -10,6 +10,7 @@ export declare class FormControlValidComponent implements OnInit, AfterContentIn
     onlyGroup: boolean;
     errorPrompt: any;
     controlName: any;
+    errorHook: Function;
     template: TemplateRef<any>;
     errorMsg: string;
     private formControl;

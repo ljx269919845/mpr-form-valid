@@ -1,3 +1,4 @@
+
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
@@ -11,6 +12,7 @@ import { IsbnPartValidDirective } from './validtors/isbn-part-valid.directive';
 import { IsbnHeaderValidDirective } from './validtors/isbn-header-valid.directive';
 import { FloatOnlyValidtorDirective } from './validtors/float-only-validtor.directive';
 import { MprFormGroupDirective } from './directives/form-group.directive';
+import { MprFormDirective } from './directives/form.directive';
 
 @NgModule({
   imports: [
@@ -25,7 +27,8 @@ import { MprFormGroupDirective } from './directives/form-group.directive';
     IsbnPartValidDirective,
     IsbnHeaderValidDirective,
     FloatOnlyValidtorDirective,
-    MprFormGroupDirective
+    MprFormGroupDirective,
+    MprFormDirective
   ],
   exports: [
     FormControlValidComponent,
@@ -36,7 +39,8 @@ import { MprFormGroupDirective } from './directives/form-group.directive';
     ReactiveFormsModule,
     FormsModule,
     FloatOnlyValidtorDirective,
-    MprFormGroupDirective
+    MprFormGroupDirective,
+    MprFormDirective
   ],
   providers: [
     GlobalValidService,
