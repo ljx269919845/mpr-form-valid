@@ -22,22 +22,22 @@ export declare class FormControlValidComponent implements OnInit, AfterContentIn
     ngOnDestroy(): void;
     private setFormControlMsgListener(control, path);
     /**
-     * 获取group下面的所有验证错误消息
-     * @param control
-     * @param path
-     */
+   * 获取group下面的所有验证错误消息
+   * @param control
+   * @param path
+   */
     private getGroupControlValidMsg(control, path, errorInfo);
     private getParentGroupELem();
     private getSlibingFormContrlElem(searchElem);
     /**
-     * 自动查找当前验证对应的formControlName或者formGroupName
-     */
+   * 自动查找当前验证对应的formControlName或者formGroupName
+   */
     private getFormControlName();
     /**
-     * 获取当前formControl相对于formGroup的path
-     * @param formControl
-     * @param root
-     * @param controlName
-     */
+   * 获取当前formControl相对于formGroup的path
+   * @param formControl
+   * @param root
+   * @param controlName
+   */
     private getPath(formControl, root, controlName);
 }

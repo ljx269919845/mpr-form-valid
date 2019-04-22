@@ -29,36 +29,36 @@ const VALID_ERROR_MSG = {
 @Component({
   selector: 'app-form-group-valid',
   templateUrl: './form-group-valid.component.html',
-  styleUrls: ['./form-group-valid.component.css']
+  styleUrls: [ './form-group-valid.component.css' ]
 })
 export class FormGroupValidComponent implements OnInit {
-
   public form: FormGroup;
   public validErrorMsg = VALID_ERROR_MSG;
 
   constructor(private fb: FormBuilder, private gbValidServ: GlobalValidService) {
     this.form = fb.group({
-      username: ['', [Validators.required]],
-      password: ['', [Validators.required]],
+      username: [ '', [ Validators.required ] ],
+      password: [ '', [ Validators.required ] ],
       user: fb.group({
-        nickname: ['', [Validators.required, Validators.maxLength(5)]],
-        sex: ['', [Validators.required]]
+        nickname: [ '', [ Validators.required, Validators.maxLength(5) ] ],
+        sex: [ '', [] ]
       }),
-      group1:  fb.group({
-        control1: ['', [Validators.required, new FloatOnlyValidtorDirective()]],
-        control2: ['', [Validators.required]]
-      }),
+      group1: fb.group({
+        control1: [ '', [ Validators.required, new FloatOnlyValidtorDirective() ] ],
+        control2: [ '', [ Validators.required ] ]
+      })
     });
   }
 
   ngOnInit() {
+    this.form.get('user').get('nickname').disable();
   }
 
   handleSubmit() {
     this.gbValidServ.validAll();
   }
 
-  handleReset(){
+  handleReset() {
     this.gbValidServ.resetNull();
   }
 }
