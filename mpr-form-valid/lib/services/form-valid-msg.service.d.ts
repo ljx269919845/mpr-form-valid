@@ -6,6 +6,7 @@ export declare class FormValidMsgService {
         errorMsg: string;
         minWeight: number;
     };
+    formartMsg(msg: string, value: any): string;
     resetMsg(msg: Object): void;
     private formatMsg(msg, path, result);
 }

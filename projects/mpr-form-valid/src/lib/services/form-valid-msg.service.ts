@@ -4,9 +4,8 @@ import { globalValidMsgServ } from './global-valid-msg.service';
 
 @Injectable()
 export class FormValidMsgService {
-
   private validMsg = {};
-  constructor() { }
+  constructor() {}
 
   public setValidMsg(msgKey: string, msgValue: string) {
     if (!msgValue) {
@@ -22,26 +21,39 @@ export class FormValidMsgService {
     let tmpWeight;
     msgPath = (msgPath || '').toLowerCase();
     if (!error || !msgPath) {
-      return {errorMsg, minWeight};
+      return { errorMsg, minWeight };
     }
 
     for (let name in error) {
-      name = name.toLowerCase();
-      tmpMsg = this.validMsg[msgPath + '.' + name] || globalValidMsgServ.getMsg(name);
-      if(!tmpMsg){
+      if (!error.hasOwnProperty(name)) {
         continue;
       }
-      if(Number.isNaN(Number(error[name]))){
+      const orgName = name;
+      name = name.toLowerCase();
+      tmpMsg = this.formartMsg(this.validMsg[msgPath + '.' + name] || globalValidMsgServ.getMsg(name), error[orgName]);
+      if (!tmpMsg) {
+        continue;
+      }
+      if (Number.isNaN(Number(error[name]))) {
         tmpWeight = 1000;
-      }else{
+      } else {
         tmpWeight = Number(error[name]);
       }
-      if(tmpWeight < minWeight){
+      if (tmpWeight < minWeight) {
         minWeight = tmpWeight;
         errorMsg = tmpMsg;
       }
     }
-    return {errorMsg, minWeight};
+    return { errorMsg, minWeight };
+  }
+
+  public formartMsg(msg: string, value: any) {
+    if (typeof value !== 'object' || !value) {
+      return msg;
+    }
+    return msg.replace(/\{(.+)\}/g, function(match, p1) {
+      return value[p1] || '';
+    });
   }
 
   public resetMsg(msg: Object) {

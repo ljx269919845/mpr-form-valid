@@ -1,11 +1,95 @@
 import { Injectable, EventEmitter } from '@angular/core';
 import { FormGroup, FormControl, AbstractControl } from '@angular/forms';
+import { Observable, Observer } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
+import scrollIntoView from 'dom-scroll-into-view';
+
+function computedStyle(el, prop) {
+  const getComputedStyle = window.getComputedStyle;
+  const style =
+    // If we have getComputedStyle
+    getComputedStyle
+      ? // Query it
+        // TODO: From CSS-Query notes, we might need (node, null) for FF
+        getComputedStyle(el)
+      : // Otherwise, we are in IE and use currentStyle
+        el.currentStyle;
+  if (style) {
+    return style[
+      // Switch to camelCase for CSSOM
+      // DEV: Grabbed from jQuery
+      // https://github.com/jquery/jquery/blob/1.9-stable/src/css.js#L191-L194
+      // https://github.com/jquery/jquery/blob/1.9-stable/src/core.js#L593-L597
+      prop.replace(/-(\w)/gi, (word, letter) => {
+        return letter.toUpperCase();
+      })
+    ];
+  }
+  return undefined;
+}
+
+function getScrollableContainer(n) {
+  let node = n;
+  let nodeName;
+  /* eslint no-cond-assign:0 */
+  while (node && (nodeName = node.nodeName.toLowerCase()) !== 'body') {
+    const overflowY = computedStyle(node, 'overflowY');
+    // https://stackoverflow.com/a/36900407/3040605
+    if (node !== n && (overflowY === 'auto' || overflowY === 'scroll') && node.scrollHeight > node.clientHeight) {
+      return node;
+    }
+    node = node.parentNode;
+  }
+  return nodeName === 'body' ? node.ownerDocument : node;
+}
 
 @Injectable()
 export class GlobalValidService {
   private validForms: Array<any> = [];
+  private needScroll = false;
+  private scrollElem: Array<Element> = [];
+  private doScrollObserv: Observable<any> = Observable.create((observer) => {
+    this.scrollObserver = observer;
+  });
+  private scrollObserver: Observer<any>;
+  private scrollOptions = null;
 
-  constructor() {}
+  constructor() {
+    this.doScrollObserv.pipe(debounceTime(500)).subscribe(() => {
+      if (!this.needScroll || !this.scrollElem.length) {
+        return;
+      }
+      this.needScroll = false;
+      let minScrollTop = Number.MAX_VALUE;
+      let scrollElem: Element;
+      this.scrollElem.forEach((elem) => {
+        const top = elem.getBoundingClientRect().top;
+        if (minScrollTop > top) {
+          minScrollTop = top;
+          scrollElem = elem;
+        }
+      });
+      if (!scrollElem) {
+        return;
+      }
+      const c = getScrollableContainer(scrollElem);
+      if (!c) {
+        return;
+      }
+      scrollIntoView(
+        scrollElem,
+        c,
+        Object.assign(
+          {},
+          {
+            onlyScrollIfNeeded: true,
+            offsetTop: 200
+          },
+          this.scrollOptions || {}
+        )
+      );
+    });
+  }
 
   public registerValidForm(form: AbstractControl, errorHook: Function) {
     let index = this.validForms.findIndex((elem) => {
@@ -46,17 +130,24 @@ export class GlobalValidService {
     });
   }
 
-  public validAll() {
+  public scrollTo(elem: Element) {
+    if (!this.needScroll) {
+      return;
+    }
+    this.scrollElem.push(elem);
+    this.scrollObserver.next(elem);
+  }
+
+  public validAll(needScroll = false, scrollOptions = null) {
+    this.needScroll = needScroll;
+    this.scrollOptions = scrollOptions;
+    this.scrollElem = [];
     let result = true;
     this.validForms.forEach((elemForm) => {
       if (elemForm.form.disabled) {
         return;
       }
       if (!elemForm.form.valid || elemForm.form['_reset']) {
-        //  if (elemForm.form['_reset']) {
-        //   elemForm.form.patchValue(elemForm.form.value, { emitModelToViewChange: false, emitViewToModelChange: false, onlySelf: true });
-        //  }
-        //  elemForm.form.patchValue(elemForm.form.value, { emitModelToViewChange: false, emitViewToModelChange: false, onlySelf: true });
         elemForm.form.markAsDirty();
         if (elemForm.form instanceof FormControl) {
           console.log(elemForm.form.status, elemForm.form);

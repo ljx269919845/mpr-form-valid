@@ -3,5 +3,6 @@
   "dest": "../../mpr-form-valid",
   "lib": {
     "entryFile": "src/public_api.ts"
-  }
+  },
+  "whitelistedNonPeerDependencies": [ "dom-scroll-into-view" ]
 }

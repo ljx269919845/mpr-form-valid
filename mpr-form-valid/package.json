@@ -1,9 +1,13 @@
 {
   "name": "mpr-form-valid",
-  "version": "1.1.2",
+  "version": "1.1.9",
   "peerDependencies": {
     "@angular/common": "^6.0.0-rc.0 || ^6.0.0",
     "@angular/core": "^6.0.0-rc.0 || ^6.0.0"
+  },
+  "dependencies": {
+    "dom-scroll-into-view": "^2.0.1",
+    "tslib": "^1.9.0"
   },
   "main": "bundles/mpr-form-valid.umd.js",
   "module": "fesm5/mpr-form-valid.js",
@@ -14,8 +18,5 @@
   "fesm2015": "fesm2015/mpr-form-valid.js",
   "typings": "mpr-form-valid.d.ts",
   "metadata": "mpr-form-valid.metadata.json",
-  "sideEffects": false,
-  "dependencies": {
-    "tslib": "^1.9.0"
-  }
+  "sideEffects": false
 }

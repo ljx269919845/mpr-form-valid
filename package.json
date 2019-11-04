@@ -1,11 +1,7 @@
 {
   "name": "mpr-form-valid",
-  "version": "1.0.6",
-  "keywords": [
-    "angular",
-    "angular-form",
-    "angular-form-valid"
-  ],
+  "version": "1.1.6",
+  "keywords": [ "angular", "angular-form", "angular-form-valid" ],
   "scripts": {
     "ng": "ng",
     "start": "ng serve --port=4202",
