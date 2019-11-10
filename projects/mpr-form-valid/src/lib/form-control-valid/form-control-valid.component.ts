@@ -29,7 +29,7 @@ const VALID_COMPONENT_NAME = 'mpr-form-control-valid';
 @Component({
   selector: VALID_COMPONENT_NAME,
   templateUrl: './form-control-valid.component.html',
-  styleUrls: [ './form-control-valid.component.css' ]
+  styleUrls: ['./form-control-valid.component.css']
 })
 export class FormControlValidComponent implements OnInit {
   //只显示formgroup本身的错误，不显示group下control的错误
@@ -45,6 +45,7 @@ export class FormControlValidComponent implements OnInit {
   private formControl: AbstractControl;
   private groupValidControlLength = 1;
   private delete = false;
+  private controlArrName = '';
 
   constructor(
     @Attribute('controlName') controlName: string,
@@ -77,11 +78,13 @@ export class FormControlValidComponent implements OnInit {
     if (!this.controlName) {
       throw new Error("can't find controlName");
     }
+    if (/(\[\d+\])$/.test(this.controlName)) {
+      this.controlArrName = this.controlName.replace(/(\[\d+\])$/, '');
+    }
     console.log(this.controlName);
     let path = '';
     const isFormControl =
-      this.container.control.get(this.controlName) &&
-      this.container.control.get(this.controlName) instanceof FormControl;
+      this.container.control.get(this.controlName) && this.container.control.get(this.controlName) instanceof FormControl;
     if (!isFormControl) {
       // from root or from formGroupName
       this.formControl = this.container.control;
@@ -102,11 +105,15 @@ export class FormControlValidComponent implements OnInit {
     } else {
       this.formControl = this.container.control.get(this.controlName);
       path = this.getPath(this.formControl, this.formControl.root, this.controlName);
+      const arrPath = path.replace(/(\[\d+\])$/, '');
       this.formControl.statusChanges.subscribe(() => {
         // if (this.formControl.pristine) {
         //   return;
         // }
         this.errorMsg = this.errMsgServ.getValidMsg(path || this.controlName, this.formControl.errors)['errorMsg'];
+        if (!this.errorMsg && this.controlArrName) {
+          this.errorMsg = this.errMsgServ.getValidMsg(arrPath || this.controlArrName, this.formControl.errors)['errorMsg'];
+        }
         if (this.errorMsg) {
           Promise.resolve(null).then(() => {
             this.globalValidServ.scrollTo(this.elemRef.nativeElement);
@@ -177,10 +184,7 @@ export class FormControlValidComponent implements OnInit {
       !parentElement.getAttribute('formGroupName') &&
       !parentElement.getAttribute('formgroup')
     ) {
-      if (
-        parentElement.nodeName.toLocaleLowerCase() === 'form' ||
-        parentElement.nodeName.toLocaleLowerCase() === 'ngform'
-      ) {
+      if (parentElement.nodeName.toLocaleLowerCase() === 'form' || parentElement.nodeName.toLocaleLowerCase() === 'ngform') {
         break;
       }
       parentElement = parentElement.parentElement;
@@ -246,9 +250,7 @@ export class FormControlValidComponent implements OnInit {
         // 向前查找兄弟节点
         const siblingElem = this.getSlibingFormContrlElem(this.elemRef.nativeElement);
         controlName =
-          siblingElem.getAttribute('formcontrolname') ||
-          siblingElem.getAttribute('formControlName') ||
-          siblingElem.getAttribute('name');
+          siblingElem.getAttribute('formcontrolname') || siblingElem.getAttribute('formControlName') || siblingElem.getAttribute('name');
       }
     }
     // if(this.controlName && this.controlName != controlName){
