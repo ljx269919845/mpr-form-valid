@@ -51,6 +51,6 @@ export class FormGroupDirectiveValidComponent implements OnInit {
 
   handleSubmit(form) {
     console.log(form);
-    this.globalServ.validAll();
+    this.globalServ.validAll(true);
   }
 }

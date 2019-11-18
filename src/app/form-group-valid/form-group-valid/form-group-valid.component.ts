@@ -55,7 +55,7 @@ export class FormGroupValidComponent implements OnInit {
   }
 
   handleSubmit() {
-    this.gbValidServ.validAll();
+    this.gbValidServ.validAll(true);
   }
 
   handleReset() {

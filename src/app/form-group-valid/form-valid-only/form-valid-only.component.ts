@@ -57,6 +57,6 @@ export class FormValidOnlyComponent implements OnInit {
   }
 
   handleSubmit() {
-    this.gbValidServ.validAll();
+    this.gbValidServ.validAll(true);
   }
 }
