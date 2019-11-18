@@ -2,7 +2,7 @@ import { Injectable, EventEmitter } from '@angular/core';
 import { FormGroup, FormControl, AbstractControl } from '@angular/forms';
 import { Observable, Observer } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
-import scrollIntoView from 'dom-scroll-into-view';
+import { scrollIntoView } from '../dom-scroll-to-elem';
 
 function computedStyle(el, prop) {
   const getComputedStyle = window.getComputedStyle;
@@ -48,7 +48,7 @@ export class GlobalValidService {
   private validForms: Array<any> = [];
   private needScroll = false;
   private scrollElem: Array<Element> = [];
-  private doScrollObserv: Observable<any> = Observable.create((observer) => {
+  private doScrollObserv: Observable<any> = Observable.create(observer => {
     this.scrollObserver = observer;
   });
   private scrollObserver: Observer<any>;
@@ -62,7 +62,7 @@ export class GlobalValidService {
       this.needScroll = false;
       let minScrollTop = Number.MAX_VALUE;
       let scrollElem: Element;
-      this.scrollElem.forEach((elem) => {
+      this.scrollElem.forEach(elem => {
         const top = elem.getBoundingClientRect().top;
         if (minScrollTop > top) {
           minScrollTop = top;
@@ -92,7 +92,7 @@ export class GlobalValidService {
   }
 
   public registerValidForm(form: AbstractControl, errorHook: Function) {
-    let index = this.validForms.findIndex((elem) => {
+    let index = this.validForms.findIndex(elem => {
       return elem.form == form;
     });
     if (index >= 0) {
@@ -107,7 +107,7 @@ export class GlobalValidService {
   }
 
   public resetNull() {
-    this.validForms.forEach((elemForm) => {
+    this.validForms.forEach(elemForm => {
       if (elemForm.form instanceof FormControl) {
         elemForm.form.reset(null, { emitEvent: false, onlySelf: true });
         elemForm.form.setErrors(null, { emitEvent: true });
@@ -143,7 +143,7 @@ export class GlobalValidService {
     this.scrollOptions = scrollOptions;
     this.scrollElem = [];
     let result = true;
-    this.validForms.forEach((elemForm) => {
+    this.validForms.forEach(elemForm => {
       if (elemForm.form.disabled) {
         return;
       }
@@ -165,7 +165,7 @@ export class GlobalValidService {
           this.validFormGroup(elemForm.form);
         }
         if (!elemForm.form.valid) {
-          elemForm.errorHooks.forEach((errorHook) => {
+          elemForm.errorHooks.forEach(errorHook => {
             errorHook(elemForm.form);
           });
         }
@@ -176,7 +176,7 @@ export class GlobalValidService {
   }
 
   public unregisterValidForm(form, errorHook: Function) {
-    const index = this.validForms.findIndex((elem) => {
+    const index = this.validForms.findIndex(elem => {
       return elem.form == form;
     });
     if (index >= 0 && this.validForms[index].count > 1) {
